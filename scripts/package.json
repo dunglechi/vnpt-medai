@@ -1,0 +1,11 @@
+{
+  "name": "migrate",
+  "version": "1.0.0",
+  "scripts": {
+    "migrate": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "generate": "npx prisma generate",
+    "push": "npx prisma db push",
+    "studio": "npx prisma studio"
+  }
+}

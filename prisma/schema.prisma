@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UsageEvent {
+  id             String   @id @default(cuid())
+  userId         String?
+  modelName      String
+  tokensUsed     Int
+  costUsd        Float
+  requestType    String   // e.g., "completion", "embedding", "image"
+  metadata       Json?    // Additional request metadata
+  createdAt      DateTime @default(now())
+  
+  @@map("usage_events")
+}
+
+model MonthlyBudget {
+  id             String   @id @default(cuid())
+  year           Int
+  month          Int      // 1-12
+  budgetLimitUsd Float
+  currentUsageUsd Float   @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([year, month])
+  @@map("monthly_budgets")
+}
+
+model AlertLog {
+  id             String   @id @default(cuid())
+  alertType      String   // e.g., "budget_warning", "budget_exceeded", "high_usage"
+  message        String
+  metadata       Json?    // Additional alert data
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  
+  @@map("alerts_log")
+}
